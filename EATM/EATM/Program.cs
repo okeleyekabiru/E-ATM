@@ -2,8 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using E_ATM.Data.Entity;
+using E_ATM.Data.Infrastructure;
+using EATM;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -11,16 +17,39 @@ namespace EATM
 {
     public class Program
     {
+
         public static void Main(string[] args)
+    {
+
+      var host = CreateHostBuilder(args).Build();
+      using (var scope = host.Services.CreateScope())
+      {
+        var services = scope.ServiceProvider;
+        try
         {
-            CreateHostBuilder(args).Build().Run();
+          var context = services.GetRequiredService<DataContext>();
+          context.Database.Migrate();
+//          new Seed().SeedGenerator(context).Wait();
+
+
         }
+        catch (Exception e)
+        {
+          var logger = services.GetRequiredService<ILogger<DataContext>>();
+          logger.LogError(e, "An Error Occured While Migrating Database");
+        }
+        host.Run();
+      }
+    }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+          Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+              webBuilder.UseStartup<Startup>();
+            });
     }
 }
+
+        
+
