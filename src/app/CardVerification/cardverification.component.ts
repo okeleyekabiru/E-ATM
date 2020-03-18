@@ -24,7 +24,8 @@ export class CardVerification implements OnInit {
     fieldDate: string
     CardHolder: string
     trackcardholder: boolean
-    trackcardvalidation:boolean
+    trackcardvalidation: boolean
+    cardnumber:string
 
    
     flagIfInvalid = (field, isValid) => {
@@ -65,6 +66,7 @@ export class CardVerification implements OnInit {
             nCheck += nDigits;
             bEven = !bEven;
         }
+        if ((nCheck % 10) == 0) this.cardnumber = digits;
         return (nCheck % 10) == 0
     };
     validateCardNumber = (cardInputs) => {
@@ -123,6 +125,10 @@ export class CardVerification implements OnInit {
         if (dateField.size ==6) {
             if (this.trackcardholder && this.trackcardvalidation && isValid) {
                 console.log("validation successful")
+                var val = this.element.nativeElement.querySelector(".pin-element")
+                this.renderer.removeClass(val, "d-none")
+                console.log(this.cardnumber)
+                
             }
             else {
                 console.log("validation failed")
