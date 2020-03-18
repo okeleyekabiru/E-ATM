@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.Threading.Tasks;
 using E_ATM.Data.Entity;
 using E_ATM.Data.Models;
@@ -28,7 +26,8 @@ namespace E_ATM.Data.repo
     public async Task<User> GetUser(string name)
     {
       return await _context.User.FirstOrDefaultAsync(n => n.FirstName.Equals(name));
+     
     }
-
+    
   }
 }
