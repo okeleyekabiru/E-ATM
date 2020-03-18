@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using E_ATM.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_ATM.Data.repo
 {
-public  class AtmRepo:IAtm
+  public  class AtmRepo:IAtm
   {
     private readonly DataContext _context;
 

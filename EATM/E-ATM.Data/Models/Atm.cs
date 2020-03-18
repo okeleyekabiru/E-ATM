@@ -14,4 +14,5 @@ namespace E_ATM.Data
       public bool IsExpired { get; set; }
       public  Accounts Accounts { get; set; }
     }
+
 }

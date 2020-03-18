@@ -71,7 +71,7 @@ namespace EATM
         return BadRequest();
       }
     [HttpPost("card")]
-      public async Task<ActionResult> CardValidation(Atm atm)
+      public ActionResult CardValidation(Atm atm)
       {
 
         var atmsValidate = AtmValidator.Validate(atm.AtmNumber);
