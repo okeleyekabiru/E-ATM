@@ -23,6 +23,8 @@ export class CardVerification implements OnInit {
     second4Digits: string
     fieldDate: string
     CardHolder: string
+    trackcardholder: boolean
+    trackcardvalidation:boolean
 
    
     flagIfInvalid = (field, isValid) => {
@@ -34,6 +36,7 @@ export class CardVerification implements OnInit {
         const re = /^([A-Za-z]{3,})\s([A-Za-z]{3,})$/;
         const isValid = re.test(target.value);
         this.flagIfInvalid(target, isValid);
+        this.trackcardholder = isValid;
         return isValid
     }
     expiryDateFormatIsValid = (field) => {
@@ -74,6 +77,7 @@ export class CardVerification implements OnInit {
         else {
             this.renderer.addClass(creditCardField, 'is-invalid')
         }
+        this.trackcardvalidation = isValid;
         return isValid
     };
     detectCardType = (first4Digits) => {
@@ -114,7 +118,16 @@ export class CardVerification implements OnInit {
             isValid = cardDate > presentDate;
             
         }
+      
         this.flagIfInvalid(dateField, isValid)
+        if (dateField.size ==6) {
+            if (this.trackcardholder && this.trackcardvalidation && isValid) {
+                console.log("validation successful")
+            }
+            else {
+                console.log("validation failed")
+            }
+        }
         return isValid;
     }
     smartCursor = () => {
