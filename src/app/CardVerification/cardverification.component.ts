@@ -1,8 +1,10 @@
 import { Component, ViewChild, Input, OnInit, ElementRef, Renderer2 } from "@angular/core";
+import { PinComponent } from './Pin.confirmation.component';
 
 @Component({
     selector: "pm-card",
     templateUrl: "./cardverification.component.html",
+    
    
 })
 export class CardVerification implements OnInit {
@@ -25,7 +27,8 @@ export class CardVerification implements OnInit {
     CardHolder: string
     trackcardholder: boolean
     trackcardvalidation: boolean
-    cardnumber:string
+    cardnumber: string
+    expiry:string
 
    
     flagIfInvalid = (field, isValid) => {
@@ -86,7 +89,7 @@ export class CardVerification implements OnInit {
         const creditCard = this.element.nativeElement.querySelector("[data-credit-card]")
         const cardTypeField = this.element.nativeElement.querySelector("[data-card-type]")
         const firstDigit = first4Digits[0];
-        const cardType = firstDigit == 4 ? 'is-visa' : firstDigit == '5' ? 'is-mastercard' : '';
+        const cardType = firstDigit == 4 ? 'is-visa' : first4Digits.startsWith("53") ||  first4Digits.startsWith("55") ? 'is-mastercard' : '';
            
          
         if (cardType === 'is-visa') {
@@ -118,11 +121,12 @@ export class CardVerification implements OnInit {
             const cardYear = Number(`20${dateField.value.split('/')[1]}`);
             const cardDate = new Date(cardYear, cardMonth)
             isValid = cardDate > presentDate;
-            
+            this.expiry = dateField.value
+            console.log(this.expiry)
         }
       
         this.flagIfInvalid(dateField, isValid)
-        if (dateField.size ==6) {
+        if (dateField.value.length == dateField.size -1 ) {
             if (this.trackcardholder && this.trackcardvalidation && isValid) {
                 console.log("validation successful")
                 var val = this.element.nativeElement.querySelector(".pin-element")
@@ -131,9 +135,9 @@ export class CardVerification implements OnInit {
                 
             }
             else {
-                console.log("validation failed")
+                console.log("verification failed")
             }
-        }
+         }
         return isValid;
     }
     smartCursor = () => {
@@ -141,10 +145,11 @@ export class CardVerification implements OnInit {
         for (var i = 0; i < fields.length; i++){
             if (fields[i].value.length == fields[i].size) {
                 fields[i + 1].focus(); 
+            } else {
+                return;
             }
-        
-                
-            
+         
+             
         }
        
     }

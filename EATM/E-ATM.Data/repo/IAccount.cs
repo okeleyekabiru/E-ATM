@@ -11,5 +11,6 @@ namespace E_ATM.Data.repo
    Task Register(Accounts accounts);
    Task<bool> SaveChangesAsync();
    Task<Accounts> GetAccess(string cardtype );
+   Task<Accounts> FindAccountById(Guid id);
  }
 }

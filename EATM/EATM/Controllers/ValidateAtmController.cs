@@ -6,6 +6,7 @@ using E_ATM.Data;
 using E_ATM.Data.Infrastructure;
 using E_ATM.Data.Models;
 using E_ATM.Data.repo;
+using EATM.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,13 +20,15 @@ namespace EATM
       private readonly IAccount _accountContext;
       private readonly IAtm _atm;
       private readonly AccountGenerator _generator;
+      private readonly IJwtSecurity _jwtSecurity;
 
-      public ValidateAtmController(IUser userContext, IAccount accountContext, IAtm atm,AccountGenerator generator)
+      public ValidateAtmController(IUser userContext, IAccount accountContext, IAtm atm,AccountGenerator generator,IJwtSecurity jwtSecurity)
       {
         _userContext = userContext;
         _accountContext = accountContext;
         _atm = atm;
         _generator = generator;
+        _jwtSecurity = jwtSecurity;
       }
     [HttpGet("get")]
       public ActionResult Get()
@@ -70,17 +73,25 @@ namespace EATM
 
         return BadRequest();
       }
-    [HttpPost("card")]
-      public ActionResult CardValidation(Atm atm)
+
+      [HttpPost("card")]
+      public async Task<ActionResult> CardValidation( AtmVm atm)
       {
 
         var atmsValidate = AtmValidator.Validate(atm.AtmNumber);
-        if (string.IsNullOrEmpty(atmsValidate) )
+        if (!atmsValidate )
         {
-          return BadRequest(new {AtmCard = "the atm pin you provide is invalid"});
+          return  BadRequest(new {AtmCard = "the atm pin you provide is invalid"});
         }
- 
-      return  Ok(new {CardValidation=atmsValidate});
+
+        var AtmDetails = await _atm.GetAtm(atm);
+
+        if (AtmDetails == null) return BadRequest(new { AtmCard = "the atm pin you provide is invalid" });
+        var user = await _accountContext.FindAccountById(AtmDetails.Accounts.Id);
+        var token =  _jwtSecurity.JwtVerification(user.User) ;
+
+        return Ok(new {Token=token});
+
       }
 
     }

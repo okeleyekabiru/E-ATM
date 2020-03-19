@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using E_ATM.Data.Entity;
 using E_ATM.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_ATM.Data.repo
 {
@@ -28,6 +29,11 @@ namespace E_ATM.Data.repo
     public Task<Accounts> GetAccess(string cardtype)
     {
       throw new NotImplementedException();
+    }
+
+    public async Task<Accounts> FindAccountById(Guid id)
+    {
+      return await _context.Account.Include(e => e.User).FirstAsync(r => r.Id == id);
     }
   }
 }

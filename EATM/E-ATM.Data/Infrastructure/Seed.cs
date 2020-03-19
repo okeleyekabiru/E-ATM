@@ -23,7 +23,7 @@ namespace E_ATM.Data.Infrastructure
     public async Task
       SeedGenerator(DataContext _dataContext)
     {
-      if (!await _dataContext.User.AnyAsync())
+      if (!await _dataContext.Users.AnyAsync())
       {
         var user = new List<User>
         {

@@ -7,11 +7,10 @@ namespace E_ATM.Data.Infrastructure
 {
   public class AtmValidator
   {
-    public static string Validate(string atmNumber)
+    public static bool Validate(string atmNumber)
     {
       var sum = 0;
-
-      string returnValue = "";
+      bool returnValue = false;
       int tracker = 1;
       for (int i = atmNumber.Length; i-- > 0;)
       {
@@ -39,10 +38,10 @@ namespace E_ATM.Data.Infrastructure
 
       if (sum % 10 == 0 && (atmNumber.Length == 16) && atmNumber.StartsWith("53") ||
           atmNumber.StartsWith("55"))
-        returnValue = "Mastercard";
+        returnValue = true;
 
       else if ((sum % 10 == 0) && (atmNumber.Length == 16) || atmNumber.Length == 13 && atmNumber.StartsWith("4"))
-        returnValue = "Visa";
+        returnValue = true;
 
 
       return returnValue;
