@@ -16,6 +16,7 @@ namespace E_ATM.Data.repo
    Task<Accounts> GetAccountByNumber(string accountNumber);
 
    Task<Accounts> Withdraw(PaymentVm account);
+   Task<Accounts> Deposit(PaymentVm account);
 
- }
+  }
 }

@@ -13,6 +13,7 @@ import { TransactonComponent } from "./Transaction/TransactionComponent";
 import { AppRoute } from "./CardVerification/AppRoute.Component";
 import { BalanceComponent } from "./Balance/BalanceComponent";
 import { WithdrawConponent } from './Withdraw/WithdrawComponent';
+import { DepositComponent } from './Withdraw/DepositComponent';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +23,8 @@ import { WithdrawConponent } from './Withdraw/WithdrawComponent';
     TransactonComponent,
     AppRoute,
     BalanceComponent,
-    WithdrawConponent
+    WithdrawConponent,
+    DepositComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +36,7 @@ import { WithdrawConponent } from './Withdraw/WithdrawComponent';
         { path: "cardverification", component: AppRoute },
         { path: "transaction", component: TransactonComponent },
         { path: "withdraw", component: WithdrawConponent },
+        { path: "deposit", component: DepositComponent },
         { path: "balance", component: BalanceComponent },
         { path: "", redirectTo: "cardverification", pathMatch: "full" },
         { path: "**", redirectTo: "cardverification", pathMatch: "full" }
