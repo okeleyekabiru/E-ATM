@@ -147,7 +147,17 @@ namespace EATM
       return NotFound(new {Account = "Invalid Transaction"});
 
     }
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost("deposit")]
+    public async Task<ActionResult> Deposit(PaymentVm payment)
+    {
+      var accounts = await _accountContext.Deposit(payment);
+      if (accounts == null) return BadRequest(new { Account = "Invalid Transaction" });
+      if (await _accountContext.SaveChangesAsync()) return Ok(accounts);
 
+      return NotFound(new { Account = "Invalid Transaction" });
+
+    }
   }
 
 }
