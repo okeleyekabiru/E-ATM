@@ -11,5 +11,7 @@ namespace E_ATM.Data.repo
    Task Register(User user);
    Task<bool> SaveChangesAsync();
    Task<User> GetUser(string name);
+   Task<User> GetUserById(string id);
+   string GetCurrentUser();
  }
 }

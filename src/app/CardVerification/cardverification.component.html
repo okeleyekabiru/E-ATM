@@ -1,4 +1,4 @@
-
+<div class="alert alert-danger text-center" *ngIf=" errorMessage">{{errorMessage}}</div>
 <div class="d-flex justify-content-center">
 <div data-credit-card="" class="mdc-card mdc-card--outlined">
     <form name="Atmform"(keyup) = "validateCardNumber(first4Digits+second4Digits+Third4Digits+Last4Digits)" >
@@ -13,7 +13,7 @@
 			</div>
 			<div data-cc-info="" >
 			<input type="text" size="20" (keyup) ="smartCursor()" placeholder="Name Surname" [(ngModel)] ="CardHolder" name="CardHolder" (keyup) ="validateCardHolderName()">
-			<input type="text" size="6" placeholder="MM/YY" [(ngModel)]="fieldDate" name="fieldDate" (keyup) ="validateCardExpiryDate()">
+			<input type="text" size="6"maxlength="5" placeholder="MM/YY" [(ngModel)]="fieldDate" name="fieldDate" (keyup) ="validateCardExpiryDate()">
             </div>
        
         </div>
@@ -21,3 +21,4 @@
     </form>
         </div> 
     </div>
+    <pm-pin  [cards]="cardnumber"  [expiry] ="expiry"></pm-pin>

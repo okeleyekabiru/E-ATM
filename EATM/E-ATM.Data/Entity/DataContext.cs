@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using E_ATM.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_ATM.Data.Entity
 {
-  public class DataContext : DbContext
+  public class DataContext : IdentityDbContext<User>
   {
-    public DbSet<User> User { get; set; }
     public DbSet<Accounts> Account { get; set; }
     public DbSet<Atm> AtmDigits { get; set; }
 
@@ -19,8 +19,6 @@ namespace E_ATM.Data.Entity
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);
-
-
     }
   }
 }
