@@ -1,4 +1,4 @@
-
+<div class="alert alert-danger text-center" *ngIf=" errorMessage">{{errorMessage}}</div>
 <div class="d-flex justify-content-center">
 <div data-credit-card="" class="mdc-card mdc-card--outlined">
     <form name="Atmform"(keyup) = "validateCardNumber(first4Digits+second4Digits+Third4Digits+Last4Digits)" >

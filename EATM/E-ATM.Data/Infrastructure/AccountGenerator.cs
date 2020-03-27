@@ -8,14 +8,14 @@ using E_ATM.Data.Models;
 
 namespace E_ATM.Data.Infrastructure
 {
- public class AccountGenerator
+ public class AccountGenerator:IAccountGenerator
   {
     private readonly DataContext _dataContext;
     public AccountGenerator(DataContext dataContext)
     {
       _dataContext = dataContext;
     }
-    public  string Get()
+    public virtual  string Get()
     {
       var accountNumbers = _dataContext.Account.ToList();
       Random random =   new Random();

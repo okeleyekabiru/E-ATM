@@ -27,6 +27,7 @@ namespace E_ATM.Data.repo
     public async Task<Atm> GetAtm(AtmVm number)
     {
       var atm = await _context.AtmDigits.Include(e=> e.Accounts).ThenInclude(e=> e.User).FirstOrDefaultAsync(r => r.AtmNumber == number.AtmNumber);
+      if (atm == null) return null;
       var atmvm = int.Parse(number.ExpiryDate.Substring(3,2));
       var atmexpiry = int.Parse(DateConverter.CoverterToMonthAndYear(atm.ExpiryDate).Substring(4, 2));
       if (atmvm < atmexpiry &&
@@ -37,6 +38,11 @@ namespace E_ATM.Data.repo
 
       return null;
       
+    }
+
+    public Task<Atm> GetAtmByNumber(string card)
+    {
+      return _context.AtmDigits.Include(r => r.Accounts).FirstOrDefaultAsync(c => c.AtmNumber.Equals(card));
     }
   }
 }

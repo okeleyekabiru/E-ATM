@@ -28,7 +28,8 @@ export class CardVerification implements OnInit {
     trackcardholder: boolean
     trackcardvalidation: boolean
     cardnumber: string
-    expiry:string
+    expiry: string
+    errorMessage:string
 
    
     flagIfInvalid = (field, isValid) => {
@@ -135,6 +136,7 @@ export class CardVerification implements OnInit {
                 
             }
             else {
+                this. errorMessage = "verification failed"
                 console.log("verification failed")
             }
          }

@@ -9,11 +9,13 @@ using E_ATM.Data.Infrastructure;
 using E_ATM.Data.Models;
 using E_ATM.Data.repo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,24 +42,38 @@ namespace EATM
               {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
               });
-            services.AddScoped<AccountGenerator>();
+            services.AddScoped<IAccountGenerator, AccountGenerator>();
             services.AddScoped<Seed>();
             services.AddScoped<IUser, UserRepo>();
             services.AddScoped<IAccount, AccountRepo>();
             services.AddScoped<IAtm, AtmRepo>();
-            services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            services.AddControllers();
+      services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<DataContext>();
         
             services.AddCors(opt =>
             {
               opt.AddPolicy("CorsPolicy",
                 policy => { policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
             });
+            services.AddMvc(config =>
+            {
+              var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+              config.Filters.Add(new AuthorizeFilter(policy));
+            });
       services.AddScoped<IJwtSecurity, JwtUserVerification>();
       var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
 
-      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+      services.AddAuthentication(x =>
+        {
+          x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+          x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+       .AddCookie()
         .AddJwtBearer(opt =>
         {
+          opt.SaveToken = true;
           opt.TokenValidationParameters = new TokenValidationParameters
           {
             ValidateIssuerSigningKey = true,
@@ -78,15 +94,14 @@ namespace EATM
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+      // app.UseHttpsRedirection();
 
-            app.UseRouting();
+      app.UseRouting();
+      app.UseCors("CorsPolicy");
+      app.UseAuthentication();
+      app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
-
-            app.UseAuthorization();
-      
-            app.UseEndpoints(endpoints =>
+      app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });

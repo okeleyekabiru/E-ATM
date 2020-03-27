@@ -11,5 +11,6 @@ namespace E_ATM.Data.repo
     Task Register(Atm atm);
     Task<bool> SaveChanges();
     Task<Atm> GetAtm(AtmVm number);
+    Task<Atm> GetAtmByNumber(string card);
   }
 }

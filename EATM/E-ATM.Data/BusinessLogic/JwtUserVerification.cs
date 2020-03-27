@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using E_ATM.Data.Infrastructure;
 using E_ATM.Data.Models;
+using E_ATM.Data.ViewModel;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -12,14 +13,14 @@ namespace E_ATM.Data.BusinessLogic
 {
    public class JwtUserVerification:IJwtSecurity
     {
-      public string JwtVerification(User user)
+      public Token JwtVerification(User user)
       {
         var claims = new List<Claim>
         {
           new Claim(JwtRegisteredClaimNames.NameId, user.Id)
 
         };
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my super long key"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
         var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256Signature);
       var tokenDescriptor = new SecurityTokenDescriptor
       {
@@ -29,9 +30,15 @@ namespace E_ATM.Data.BusinessLogic
       };
       var tokenHandler = new JwtSecurityTokenHandler();
       var token = tokenHandler.CreateToken(tokenDescriptor);
-      return tokenHandler.WriteToken(token);
+      var returnedToken = new Token
+      {
+        token = tokenHandler.WriteToken(token),
+        ExpiryDate = token.ValidTo
+      };
 
 
-    }
+      return returnedToken;
+
+      }
     }
 }
