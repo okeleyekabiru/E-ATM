@@ -62,7 +62,7 @@ namespace E_ATM.Data.repo
       var account = await _context.Account.FirstOrDefaultAsync(a => a.AccountNumber.Equals(accounts.AccountNumber));
       if (account== null)
       {
-        return null;
+        return null;    
       }
         account.Balance += accounts.Amount;
         _context.Entry(account).State = EntityState.Modified;

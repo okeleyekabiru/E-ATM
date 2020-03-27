@@ -152,7 +152,7 @@ namespace EATM
     public async Task<ActionResult> Deposit(PaymentVm payment)
     {
       var accounts = await _accountContext.Deposit(payment);
-      if (accounts == null) return BadRequest(new { Account = "Invalid Transaction" });
+      if (accounts == null) return BadRequest(new { Account = "Invalid Transaction please provide a valid details" });
       if (await _accountContext.SaveChangesAsync()) return Ok(accounts);
 
       return NotFound(new { Account = "Invalid Transaction" });
